@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  chanchito:
+    build: 
+      context: . # Busca el Dockerfile en el directorio actual
+      dockerfile: Dockerfile.dev # Usa el Dockerfile-dev
+    ports: 
+      - "3000:3000" # Mapea el puerto 3000 del contenedor al puerto 3000 del host
+    links:
+      - monguito # Enlaza el contenedor chanchito con el contenedor monguito
+    volumes:
+        - .:/home/app # Mapea el directorio actual al directorio /home/app del contenedor
+  monguito:
+    #image: mongo:4.4.6 # Descarga la imagen de mongo en la versión 4.4.6
+    image: mongo # Descarga la imagen de mongo en la versión latest
+    ports:
+      - "27017:27017" # Mapea el puerto 27017 del contenedor al puerto 27017 del host
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin # Usuario de la base de datos
+      MONGO_INITDB_ROOT_PASSWORD: password # Contraseña del usuario de la base de datos
+    volumes:
+      - mongo_data:/data/db # Mapea el volumen mongo_data al directorio /data/db del contenedor
+volumes:
+  mongo_data: # Crea un volumen llamado mongo_data
